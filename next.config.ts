@@ -1,7 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // videos: {
+  //   remotePatterns: [
+  //     {
+  //       protocol: "http",
+  //       host: "commondatastorage.googleapis.com",
+  //     }
+  //   ]
+  // }
 };
 
 export default nextConfig;
