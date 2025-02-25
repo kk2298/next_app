@@ -49,7 +49,7 @@ const Page = async ({params}: any) => {
         <meta property="og:title" content={`${result.name}`} />
         <meta property="og:description" content={`${result.description}`} />
       </Head>
-     <div className="bg-neutral-59">
+     <div className="bg-neutral-50 pb-5">
      <Breadcrumbs items={[
           { label: 'Products', href: '/products' },
           { label: result.name, href: `/products/${id}` },

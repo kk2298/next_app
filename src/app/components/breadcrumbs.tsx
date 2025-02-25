@@ -9,8 +9,8 @@ type Props = {}
 const Breadcrumbs = ({items}: any) => {
   return (
     <>
-     <div className="">
-     <ol className="w-screen  flex pt-8 bg-neutral-50 pl-6 mt-14">
+     <div className="bg-neutral-50">
+     <ol className="w-full  flex pt-8  pl-6 mt-14">
      <FolderClosed  className="mr-2 text-blue-500"/>
         {items?.map((item, index) => (
           <li key={index} className="flex items-center">

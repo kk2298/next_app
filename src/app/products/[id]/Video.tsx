@@ -1,10 +1,9 @@
 'use client'
 
 import React, {useState, useEffect} from 'react'
-
+import Link from 'next/link'
 type Props = {
   product: any;
-  similarProducts: any[];
 }
 
 const Video = ({ product }: Props) => {
@@ -30,12 +29,10 @@ const Video = ({ product }: Props) => {
 
   },[])
   return (
-    <div className="flex  bg-neutral-50 flex-col lg:flex-row">
-      <div className="w-[100%] aspect-video my-8 lg:w-[70%] flex-1 flex  justify-center  bg-white">
+    <div className="flex  bg-white flex-col lg:flex-row  md:px-8 gap-8">
+      <div className=" my-8  flex-1 flex  justify-center  bg-white">
         <iframe
-          width="560"
-          height="315"
-          className="w-[70%] h-[60%]"
+          className="w-full  h-[450px]"
           src={product.url || undefined}
           title="YouTube video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -43,24 +40,30 @@ const Video = ({ product }: Props) => {
           allowFullScreen
         />
       </div>
-
-      <div className="flex flex-col items-center  lg:w-[30%] p-4">
+      
+      <div className="px-4 md:px-0">
         <h2 className="text-lg font-semibold mb-4">Related Videos</h2>
+        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 lg:grid-cols-1'>
         {relatedVideos?.map((video) => (
-          <div key={video.id} className="mb-4">
+          <div  className="mb-6 max-w-[350px]">
             <iframe
-              width="100%"
-              height="180"
+            className="responsive-iframe pointer-events-none"
               src={video.url}
               title={video.name}
+              className='w-full h-full'
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               referrerPolicy="strict-origin-when-cross-origin"
               allowFullScreen
             />
-            <p className="mt-2 text-sm">{video.name}</p>
+            <Link key={video.id} href={`/products/${video.id}`}>
+            <p className="mb-2 text-md text-blue-500 underline font-medium hover:text-blue-800">{video.name}</p>
+          </Link>
           </div>
         ))}
+        </div>
+
       </div>
+
     </div>
   )
 }
