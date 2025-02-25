@@ -40,6 +40,8 @@ const Page = async ({params}: any) => {
       body: JSON.stringify({id}),
     });
     const result = await response.json();
+
+    
   return (
     <>
       <Head>
@@ -47,13 +49,12 @@ const Page = async ({params}: any) => {
         <meta property="og:title" content={`${result.name}`} />
         <meta property="og:description" content={`${result.description}`} />
       </Head>
-     <div className="bg-neutral-59 absolute">
+     <div className="bg-neutral-59">
      <Breadcrumbs items={[
           { label: 'Products', href: '/products' },
           { label: result.name, href: `/products/${id}` },
         ]} />
      </div>
-     <h1 className="text-neutral-50 bg-neutral-50">{result.name}</h1>
     <Video  product={result}/>
     </>
   )

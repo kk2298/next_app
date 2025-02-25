@@ -41,6 +41,7 @@ export default function Search({products}:any) {
       return filteredProducts
     }
   }
+
   useEffect(()=>{
     if(inView === true && inputRef?.current?.value === ""){
       const fetchNewProducts = async () => {
@@ -87,17 +88,12 @@ export default function Search({products}:any) {
       />
         
         </div>
-
-  
-        
       </div>
     </div>
   </section>
-  <div id="root" className=''>
+  <div id="root" className='mt-6'>
   <section id="featured-products" className=" mx-auto flex justify-center">
-    <div className="container px-4">
-      <h1 className="text-3xl font-medium text-center mb-12 animate__animated animate__fadeIn">Products</h1>
-      
+    <div className="container px-4">      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {
            productsFunction()?.data?.map((product:any, index:any) => {
