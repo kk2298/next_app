@@ -10,35 +10,23 @@ export const metadata: Metadata = {
     };
 
 
-
+const port = 3000
 type Props = {};
 
 
 const Page = async (props: Props) => {
 
-  const data = await fetch('http://localhost:3000/api/search', {
-    method: 'GET',
+  const data = await fetch(`http://localhost:${process.env.PORT}/api/products`, {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({
+      offset: 0,
+      limit: 5
+    })
   });
   const allProducts = await data.json();
-
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "itemListElement": allProducts?.data?.map((product:any, index:any) => {
-      return {
-        "@type": "ListItem",
-        "position": index + 1,
-        "url": `http://localhost:3001/products/${product.id}`,
-        "name": product.name,
-        "description": product.description,
-        "image": product.image,
-      };
-    }),
-
-  }
   
   
   if (!allProducts) {

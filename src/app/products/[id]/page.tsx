@@ -10,10 +10,10 @@ import Head from "next/head";
 //   description: "This is a product description"
 // };
 
-
+const port = 3000;
 export async function generateMetadata({params}: any){
   const { id } =   await params;
-  const response = await fetch('http://localhost:3000/api/dummy', {
+  const response = await fetch(`http://localhost:${process.env.PORT}/api/dummy`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ export async function generateMetadata({params}: any){
 const Page = async ({params}: any) => {
     const {id} = await params;
 
-    const response = await fetch('http://localhost:3000/api/dummy', {
+    const response = await fetch(`http://localhost:${process.env.PORT}/api/dummy`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

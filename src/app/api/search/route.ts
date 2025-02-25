@@ -12,3 +12,11 @@ export async function GET(req: Request){
         data: result
     })
 }
+
+export async function POST(req: Request){
+    const {productsLength, searchInput} = await req.json();
+    const products = data.slice(0,Number(productsLength));
+    const regex = new RegExp(searchInput, 'i');
+    const result = products.filter(product => regex.test(product.name));
+    return Response.json({data: result});
+}
