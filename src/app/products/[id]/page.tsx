@@ -4,6 +4,7 @@ import { Metadata } from "next"
 import Video from "./Video";
 import Link from "next/link";
 import Head from "next/head";
+import Breadcrumbs from '../../components/breadcrumbs'
 
 // export const metadata: Metadata = {
 //   title: "Product 1", 
@@ -13,7 +14,7 @@ import Head from "next/head";
 const port = 3000;
 export async function generateMetadata({params}: any){
   const { id } =   await params;
-  const response = await fetch(`http://localhost:${process.env.PORT}/api/dummy`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/dummy`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -31,7 +32,7 @@ export async function generateMetadata({params}: any){
 const Page = async ({params}: any) => {
     const {id} = await params;
 
-    const response = await fetch(`http://localhost:${process.env.PORT}/api/dummy`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/dummy`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -46,12 +47,13 @@ const Page = async ({params}: any) => {
         <meta property="og:title" content={`${result.name}`} />
         <meta property="og:description" content={`${result.description}`} />
       </Head>
-     <div className="bg-neutral-100 p-4 absolute">
-      <Link href="/products" className=" p-2 rounded-lg underline font-medium  hover:text-gray-500">
-      Go Back
-      </Link>
+     <div className="bg-neutral-59 absolute">
+     <Breadcrumbs items={[
+          { label: 'Products', href: '/products' },
+          { label: result.name, href: `/products/${id}` },
+        ]} />
      </div>
-     <h1 className="text-neutral-100 bg-neutral-100">{result.name}</h1>
+     <h1 className="text-neutral-50 bg-neutral-50">{result.name}</h1>
     <Video  product={result}/>
     </>
   )

@@ -16,14 +16,14 @@ type Props = {};
 
 const Page = async (props: Props) => {
 
-  const data = await fetch(`http://localhost:${process.env.PORT}/api/products`, {
+  const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       offset: 0,
-      limit: 5
+      limit: 10
     })
   });
   const allProducts = await data.json();

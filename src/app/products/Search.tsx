@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
+import productImages from '../constants';
+import Breadcrumbs from  '../components/breadcrumbs';
 
 export default function Search({products}:any) {
     const [allProducts, setAllProducts] = useState(products);
@@ -18,7 +20,7 @@ export default function Search({products}:any) {
    async function handleInputChange(e:any){
         const searchInput = e.target.value;
         const productsLength = allProducts?.data?.length;
-        const data = await fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/search`, {
+        const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/search`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -42,14 +44,14 @@ export default function Search({products}:any) {
   useEffect(()=>{
     if(inView === true && inputRef?.current?.value === ""){
       const fetchNewProducts = async () => {
-      const data = await fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/products`, {
+      const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           offset: allProducts?.data?.length,
-          limit: 5
+          limit: 10
         })
       });
       const newProducts = await data.json();
@@ -65,9 +67,13 @@ export default function Search({products}:any) {
     }
   },[allProducts])
     return (
-        <>
-   <div id="root" className="bg-neutral-50">
-  <section id="search" className=" py-6">
+        <> 
+        <Breadcrumbs items={[
+          { label: 'Products', href: '/products' }
+        ]} />
+       <div id="root" className="bg-neutral-50">
+         <section id="search" className=" py-6">
+       
     <div className="container mx-auto px-4">
       <div className="max-w-4xl mx-auto">
         <div className=" relative animate__animated animate__fadeInDown">
@@ -97,15 +103,14 @@ export default function Search({products}:any) {
            productsFunction()?.data?.map((product:any, index:any) => {
                 return (
         <Link href={`/products/${product?.id}`} key={index} ref={ lastIndex === index ? ref : null}>
-        <div className=" bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300 animate__animated animate__fadeInUp">
-          <div className="aspect-w-16 aspect-h-9 bg-neutral-200">
+        <div className=" bg-white overflow-hidden rounded-xl shadow-lg  transform hover:scale-105 transition-transform duration-300 animate__animated animate__fadeInUp">
+          <div className="aspect-w-16 aspect-h-9 bg-white p-4">
             <div className="flex items-center justify-center h-48 bg-white overflow-hidden">
-             <img src={product.image} alt={product?.name} className='object-contain w-full h-full'/>
+             <img src={productImages[product?.name]} alt={product?.name} className='object-contain w-full h-full'/>
             </div>
           </div>
-          <div className="p-5 bg-neutral-200">
-            <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
-            <p className="text-neutral-600 mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt.</p>
+          <div className="h-28  flex text-center justify-center items-center">
+            <h3 className="  text-xl font-semibold mb-2">{product.name}</h3>
           </div>
         </div>
         </Link>
