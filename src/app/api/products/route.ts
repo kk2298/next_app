@@ -1,4 +1,4 @@
-import { data } from '../dummy/route';
+import { data } from '../../components/data'; 
 
 export async function POST(req: Request){
     const {offset, limit} = await req.json();

@@ -12,7 +12,7 @@ const Breadcrumbs = ({items}: any) => {
      <div className="bg-neutral-50">
      <ol className="w-full  flex pt-8  pl-6 mt-14">
      <FolderClosed  className="mr-2 text-blue-500"/>
-        {items?.map((item, index) => (
+        {items?.map((item:any, index:any) => (
           <li key={index} className="flex items-center">
             <Link href={item.href}  className="hover:underline text-blue-500">
               {item.label}

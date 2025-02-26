@@ -10,7 +10,7 @@ import ramco_plastering_compound from '../../public/Images/ramco_plastering_comp
 import ramco_super_fine_putty from '../../public/Images/ramco_super_fine_putty.png';
 import ramco_super_shield from '../../public/Images/ramco_super_shield.jpg';
 
-const productImages = {
+const productImages:any = {
   'Ramco Epoxy Tile Fix': ramco_epoxy_tile_fix.src,
   "Ramco Tile Fix": ramco_tile_fix.src,
   'Ramco Tile Grout': ramco_tile_grout.src,

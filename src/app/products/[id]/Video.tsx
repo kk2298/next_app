@@ -44,13 +44,12 @@ const Video = ({ product }: Props) => {
       <div className="px-4 md:px-0">
         <h2 className="text-lg font-semibold mb-4">Related Videos</h2>
         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 lg:grid-cols-1'>
-        {relatedVideos?.map((video) => (
-          <div  className="mb-6 max-w-[350px]">
+        {relatedVideos?.map((video:any) => (
+          <div  className="mb-6 max-w-[350px]" key={video.id}>
             <iframe
-            className="responsive-iframe pointer-events-none"
+            className="responsive-iframe pointer-events-none w-full h-full"
               src={video.url}
               title={video.name}
-              className='w-full h-full'
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               referrerPolicy="strict-origin-when-cross-origin"
               allowFullScreen
