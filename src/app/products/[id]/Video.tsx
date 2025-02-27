@@ -27,7 +27,7 @@ const Video = ({ product }: Props) => {
 
     fetchRelatedProducts();
 
-  },[])
+  })
   return (
     <div className="flex  bg-white flex-col lg:flex-row  md:px-8 gap-8">
       <div className=" my-8  flex-1 flex  justify-center  bg-white">

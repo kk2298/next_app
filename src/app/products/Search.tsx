@@ -75,7 +75,7 @@ export default function Search({ products }: any) {
       }
       fetchNewProducts();
     }
-  }, [inView])
+  }, [inView,allProducts?.data])
 
   useEffect(() => {
     if (allProducts?.data?.length > 0) {

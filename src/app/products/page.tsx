@@ -32,8 +32,7 @@ const Page = async (props: Props) => {
 
     allProducts = await response.json();
   } catch (error) {
-    console.error('Failed to fetch products:', error);
-    return <div>Error loading products. Please try again later.</div>;
+   
   }
 
   if (!allProducts) {
