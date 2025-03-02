@@ -6,6 +6,7 @@ import { useInView } from "react-intersection-observer";
 import productImages from '../constants';
 import Breadcrumbs from  '../components/breadcrumbs';
 import { useDebounce } from 'use-debounce';
+import Card from "../components/card";
 
 export default function Search({ products }: any) {
   const [allProducts, setAllProducts] = useState(products);
@@ -88,7 +89,7 @@ export default function Search({ products }: any) {
       <Breadcrumbs items={[
         { label: 'Products', href: '/products' }
       ]} />
-      <div id="root" className="bg-neutral-50">
+      <div id="root" className="bg-neutral-50 min-h-screen">
         <section id="search" className="py-6">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
@@ -110,20 +111,9 @@ export default function Search({ products }: any) {
             <div className="container px-4">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {
-                  productsFunction()?.data?.map((product: any, index: any) => {
+                  productsFunction()?.data?.map((product: any) => {
                     return (
-                      <Link href={`/products/${product?.id}`} key={index} >
-                        <div className="bg-white overflow-hidden rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 animate__animated animate__fadeInUp">
-                          <div className="aspect-w-16 aspect-h-9 bg-white p-4">
-                            <div className="flex items-center justify-center h-48 bg-white overflow-hidden">
-                              <img src={productImages[product?.name]} alt={product?.name} className='object-contain w-full h-full' />
-                            </div>
-                          </div>
-                          <div className="h-28 flex text-center justify-center items-center">
-                            <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
-                          </div>
-                        </div>
-                      </Link>
+                      <Card product={product} key={product._id}/>
                     )
                   })
                 }

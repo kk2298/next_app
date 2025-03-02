@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import React from 'react';
 import { Metadata } from 'next';
 import Search from './Search';
@@ -15,29 +14,18 @@ const Page = async (props: Props) => {
   let allProducts = [];
 
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        offset: 0,
-        limit: 10
-      })
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/get-products`, {
+      method: 'GET',
     });
 
     if (!response.ok) {
       throw new Error(`Error: ${response.statusText}`);
     }
-
     allProducts = await response.json();
   } catch (error) {
-   
+    console.error('Error:', error);
   }
 
-  if (!allProducts) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <>
@@ -46,7 +34,7 @@ const Page = async (props: Props) => {
         <meta property="og:title" content="Product List" />
         <meta property="og:description" content="List of products available" />
       </Head>
-      <Search products={allProducts} />
+      <Search products={allProducts}/>
     </>
   );
 };
