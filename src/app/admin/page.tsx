@@ -1,21 +1,3 @@
-<<<<<<< HEAD
-
-import React from 'react';
-;
-
-
-
-const Admin = ()=>
-{
-    return (
-        <div>
-            <h1>Admin Page</h1>
-        </div>
-    )
-}
-
-export default Admin;
-=======
 'use client'
 import React, { useEffect, useState } from 'react'
 import DialogBox from '../components/dialog'
@@ -110,4 +92,3 @@ const page = (props: Props) => {
 }
 
 export default page
->>>>>>> b99c8148f317d07b2b41ce49b51d08f837593292

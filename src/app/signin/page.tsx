@@ -78,6 +78,9 @@ const SignInPage = () => {
           </button>
         </form>
         <p className="text-center mt-4">
+          <Link href="/forgotpassword" className="text-blue-500 hover:underline">Forgot Password?</Link>
+        </p>
+        <p className="text-center mt-4">
           Don't have an account? <Link href="/signup" className="text-blue-500 hover:underline">Sign Up</Link>
         </p>
       </div>

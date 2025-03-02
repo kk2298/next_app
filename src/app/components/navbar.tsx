@@ -3,39 +3,74 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import logo from '../../../public/Images/logo.jpg';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
+import Cookies from 'js-cookie';
 
 type Props = {};
 
 const Navbar = (props: Props) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userRole, setUserRole] = useState('');
+  const [token, setToken] = useState(Cookies.get('token'));
+  const router = useRouter();
+
+  const checkAuth = async () => {
+    try {
+      const token = Cookies.get('token');
+      console.log(token);
+      if (token) {
+        const response = await axios.get('/api/helper');
+        setIsAuthenticated(true);
+        setUserRole(response.data.data.role);
+      } else {
+        setIsAuthenticated(false);
+        setUserRole('');
+      }
+    } catch (error) {
+      console.error(error);
+      setIsAuthenticated(false);
+      setUserRole('');
+    }
+  };
 
   useEffect(() => {
-    // Fetch user authentication status and role from local storage or API
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    if (user && user.token) {
-      setIsAuthenticated(true);
-      setUserRole(user.role);
-    }
+    checkAuth();
+  }, [token]);
+
+  useEffect(() => {
+    const handleCookieChange = () => {
+      setToken(Cookies.get('token'));
+    };
+
+    // Listen for cookie changes
+    const interval = setInterval(handleCookieChange, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
-  const handleLogout = () => {
-    // Clear user data from local storage and update state
-    localStorage.removeItem('user');
-    setIsAuthenticated(false);
-    setUserRole('');
+  const handleLogout = async () => {
+    try {
+      await axios.get('/api/logout');
+      toast.success('Logout successful');
+      Cookies.remove('token');
+      Cookies.remove('role');
+      setIsAuthenticated(false);
+      setUserRole('');
+      router.push('/products');
+    } catch (error: any) {
+      console.log(error.message);
+      toast.error(error.message);
+    }
   };
 
   return (
-<<<<<<< HEAD
     <nav className='w-screen bg-white fixed z-50 top-0 shadow-md flex justify-between items-center px-6'>
       <div className='w-28'>
         <Image src={logo} alt="Ramco" layout="responsive" />
-=======
-    <nav className='w-screen bg-white fixed z-50 top-0 shadow-md'>
-      <div className='w-28 mx-6'>
-        <img src={logo.src} alt='Ramco' className='w-28'/>
->>>>>>> b99c8148f317d07b2b41ce49b51d08f837593292
       </div>
       <div className='flex items-center'>
         {isAuthenticated ? (
