@@ -3,9 +3,9 @@ import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/re
 type Props = {}
 
 const DialogBox = ({open,setOpen, product}: any) => {
-      const [imagePreview, setImagePreview] = useState<string | null>(null)
-      const [videoPreview, setVideoPreview] = useState<string | null>(null)
-
+      const [imagePreview, setImagePreview] = useState<string | null>(null);
+      const [videoPreview, setVideoPreview] = useState<string | null>(null);
+      const [keywords, setKeywords] = useState<Array<String>>([]);
 
        const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
           const file = e.target.files?.[0]
@@ -36,6 +36,21 @@ const DialogBox = ({open,setOpen, product}: any) => {
           const videoInput = document.getElementById('product-video') as HTMLInputElement
           if (videoInput) videoInput.value = ''
         }
+
+        const handleAddKeyword = (e: React.KeyboardEvent<HTMLInputElement>) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            const value = (e.target as HTMLInputElement).value.trim();
+            if (value && !keywords.includes(value)) {
+              setKeywords([...keywords, value]);
+            }
+            (e.target as HTMLInputElement).value = '';
+          }
+        };
+        
+        const handleRemoveKeyword = (tagToRemove: string) => {
+          setKeywords(keywords.filter(tag => tag !== tagToRemove));
+        };
       
   return (
    <>
@@ -74,7 +89,7 @@ const DialogBox = ({open,setOpen, product}: any) => {
                 <input
                   type="text"
                   id="product-name"
-                  name="product-name"
+                  name="name"
                   defaultValue={product?.name || ""}
                   required
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900"
@@ -93,7 +108,7 @@ const DialogBox = ({open,setOpen, product}: any) => {
                 <textarea
                   id="product-description"
                   defaultValue={product?.description || ""}
-                  name="product-description"
+                  name="description"
                   rows={4}
                   required
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900"
@@ -115,7 +130,7 @@ const DialogBox = ({open,setOpen, product}: any) => {
                       <input
                         type="file"
                         id="product-image"
-                        name="product-image"
+                        name="image"
                         accept="image/*"
                         className="hidden"
                         onChange={handleImageChange}
@@ -224,7 +239,7 @@ const DialogBox = ({open,setOpen, product}: any) => {
                       <input
                         type="file"
                         id="product-video"
-                        name="product-video"
+                        name="video"
                         accept="video/*"
                         className="hidden"
                         onChange={handleVideoChange}
@@ -254,7 +269,7 @@ const DialogBox = ({open,setOpen, product}: any) => {
                           <span> or drag and drop</span>
                         </div>
                         <p className="text-xs text-gray-500">
-                          MP4, WebM, Ogg up to 50MB
+                          MP4, WebM, Ogg up to 10MB
                         </p>
                       </div>
                     </div>
@@ -323,67 +338,56 @@ const DialogBox = ({open,setOpen, product}: any) => {
                 </div>
               </div>
 
-              {/* Product Tags */}
-              {/* <div>
+              {/* Keywords  */}
+              <div>
                 <label
                   htmlFor="product-tags"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Product Tags
+                  Keywords
                 </label>
                 <div className="relative">
                   <input
                     type="text"
                     id="product-tags-input"
-                    name="product-tags-input"
+                    name="keywords"
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900"
                     placeholder="Add tags (press Enter after each tag)"
+                    onKeyDown={handleAddKeyword}
                   />
-                  <button
-                    type="button"
-                    id="add-tag-btn"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-500"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 3a1 1 0 00-1 1v5H4a1 1 0 100 2h5v5a1 1 0 102 0v-5h5a1 1 0 100-2h-5V4a1 1 0 00-1-1z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </button>
                 </div>
 
                 <div className="mt-2" id="tags-container">
                   <div className="flex flex-wrap gap-2">
-                    <div className="tag inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                      Example tag
-                      <button
-                        type="button"
-                        className="ml-1 text-blue-600 hover:text-blue-800 focus:outline-none"
+                    {keywords.map((tag: any) => (
+                      <div
+                        key={tag}
+                        className="tag inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
                       >
-                        <svg
-                          className="h-3 w-3"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
+                        {tag}
+                        <button
+                          type="button"
+                          className="ml-1 text-blue-600 hover:text-blue-800 focus:outline-none"
+                          onClick={() => handleRemoveKeyword(tag)}
                         >
-                          <path
-                            fillRule="evenodd"
-                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </button>
-                    </div>
+                          <svg
+                            className="h-3 w-3"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
                   </div>
                   <input type="hidden" id="product-tags" name="product-tags" />
                 </div>
-              </div> */}
+              </div>
 
               {/* Action Buttons */}
               <div className="pt-4 border-t border-gray-200 flex justify-end space-x-3">

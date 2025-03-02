@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DialogBox from '../components/dialog'
 import AlertBox from '../components/alert'
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
@@ -7,13 +7,21 @@ type Props = {}
 
 const page = (props: Props) => {
 
-  const [open, setOpen] = useState(false)
-  const [showAlert, setShowAlert] = useState(false)
-  const [currentProduct, setCurrentProduct] = useState<any>(null)
- 
+  const [open, setOpen] = useState(false);
+  const [openEditForm, setOpenEditForm] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [currentProduct, setCurrentProduct] = useState<any>(null);
+
+  async function addNewProduct(e: any){
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    
+  }
+  
   return (
     <>
-    <DialogBox open={open} setOpen={setOpen} product={currentProduct}/>
+    <DialogBox open={open} setOpen={setOpen} />
+    <DialogBox open={openEditForm} setOpen={setOpenEditForm}  product={currentProduct}/>
     <AlertBox open={showAlert} setOpen={setShowAlert} title='Delete Product?' description="This operation will delete the product" buttonTitle={"Delete"}/>
     <div  className="bg-neutral-50 pt-20">
   {/* All products list */}
