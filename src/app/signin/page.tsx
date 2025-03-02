@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
+import axios from "axios";
 
 const SignInPage = () => {
   const [email, setEmail] = useState('');
@@ -16,12 +17,29 @@ const SignInPage = () => {
     e.preventDefault();
     setError('');
 
-    if (email === 'keerthana@gmail.com' && password === '123') {
-      router.push('/dashboard');
-    } else {
-      setError('Invalid email or password');
-      toast.error('Invalid email or password');
+    try {
+      
+      const response = await axios.post("/api/login", {email, password});
+      console.log("Login success", response.data);
+      toast.success("Login success");
+      router.push("/products");
+  } catch (error:any) {
+    if (error.response.data.error === 'User does not exist') {
+      setError('User does not exist');
+      toast.error('User does not exist');
+    } 
+    else if (error.response.data.error === 'Invalid password') {
+      setError('Invalid password');
+      toast.error('Invalid password');
     }
+    
+    else {
+      console.log("Login failed", error.message);
+      toast.error(error.message);
+    }
+     
+ 
+  }
   };
 
   return (

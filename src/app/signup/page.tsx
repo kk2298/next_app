@@ -4,8 +4,10 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from "axios";
 
 const SignUpPage = () => {
+  const [username,setname] =useState('')
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -47,7 +49,23 @@ const SignUpPage = () => {
     // Replace with your sign-up logic
     // For example, call an API to create a new user
     // If successful, redirect to the dashboard or login page
-    router.push('/dashboard');
+    try
+    {
+      const response = await axios.post("/api/signup", {username,email,password});
+            console.log("Signup success", response.data);
+            router.push("/signin");
+    }
+    catch (error:any) {
+      console.log("Signup failed", error.message);
+      
+      if (error.response.data.error === 'User already exists') {
+        setError('User already exists');
+        toast.error('User already exists');
+      } else {
+        toast.error(error.message);
+      }
+  }
+   
   };
 
   return (
@@ -56,6 +74,17 @@ const SignUpPage = () => {
         <h2 className="text-2xl font-semibold text-center mb-6">Sign Up</h2>
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         <form onSubmit={handleSubmit}>
+        <div className="mb-4">
+            <label htmlFor="username" className="block text-gray-700">Name</label>
+            <input
+              type="username"
+              id="username"
+              value={username}
+              onChange={(e) => setname(e.target.value)}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              required
+            />
+          </div>
           <div className="mb-4">
             <label htmlFor="email" className="block text-gray-700">Email</label>
             <input
