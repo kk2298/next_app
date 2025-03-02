@@ -27,9 +27,15 @@ const Navbar = (props: Props) => {
   };
 
   return (
+<<<<<<< HEAD
     <nav className='w-screen bg-white fixed z-50 top-0 shadow-md flex justify-between items-center px-6'>
       <div className='w-28'>
         <Image src={logo} alt="Ramco" layout="responsive" />
+=======
+    <nav className='w-screen bg-white fixed z-50 top-0 shadow-md'>
+      <div className='w-28 mx-6'>
+        <img src={logo.src} alt='Ramco' className='w-28'/>
+>>>>>>> b99c8148f317d07b2b41ce49b51d08f837593292
       </div>
       <div className='flex items-center'>
         {isAuthenticated ? (

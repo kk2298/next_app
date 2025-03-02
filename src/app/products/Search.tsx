@@ -10,13 +10,13 @@ import { useDebounce } from 'use-debounce';
 export default function Search({ products }: any) {
   const [allProducts, setAllProducts] = useState(products);
   const [filteredProducts, setFilteredProducts] = useState(allProducts);
-
-  const [lastIndex, setLastIndex] = useState(allProducts.length - 1);
   const inputRef = useRef<any>(null);
-  const { ref, inView, entry } = useInView({
-    threshold: 1,
-    triggerOnce: true
-  });
+
+  // const [lastIndex, setLastIndex] = useState(allProducts.length - 1);
+  // const { ref, inView, entry } = useInView({
+  //   threshold: 1,
+  //   triggerOnce: true
+  // });
 
   const [searchInput, setSearchInput] = useState('');
   const [debouncedSearchInput] = useDebounce(searchInput, 500);
@@ -57,31 +57,31 @@ export default function Search({ products }: any) {
     }
   }
 
-  useEffect(() => {
-    if (inView === true && inputRef?.current?.value === "") {
-      const fetchNewProducts = async () => {
-        const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            offset: allProducts?.data?.length,
-            limit: 10
-          })
-        });
-        const newProducts = await data.json();
-        setAllProducts({ data: [...allProducts?.data, ...newProducts?.data] });
-      }
-      fetchNewProducts();
-    }
-  }, [inView,allProducts?.data])
+  // useEffect(() => {
+  //   if (inView === true && inputRef?.current?.value === "") {
+  //     const fetchNewProducts = async () => {
+  //       const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`, {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //         body: JSON.stringify({
+  //           offset: allProducts?.data?.length,
+  //           limit: 10
+  //         })
+  //       });
+  //       const newProducts = await data.json();
+  //       setAllProducts({ data: [...allProducts?.data, ...newProducts?.data] });
+  //     }
+  //     fetchNewProducts();
+  //   }
+  // }, [inView,allProducts?.data])
 
-  useEffect(() => {
-    if (allProducts?.data?.length > 0) {
-      setLastIndex(allProducts?.data?.length - 1);
-    }
-  }, [allProducts])
+  // useEffect(() => {
+  //   if (allProducts?.data?.length > 0) {
+  //     setLastIndex(allProducts?.data?.length - 1);
+  //   }
+  // }, [allProducts])
 
   return (
     <>
@@ -112,7 +112,7 @@ export default function Search({ products }: any) {
                 {
                   productsFunction()?.data?.map((product: any, index: any) => {
                     return (
-                      <Link href={`/products/${product?.id}`} key={index} ref={lastIndex === index ? ref : null}>
+                      <Link href={`/products/${product?.id}`} key={index} >
                         <div className="bg-white overflow-hidden rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 animate__animated animate__fadeInUp">
                           <div className="aspect-w-16 aspect-h-9 bg-white p-4">
                             <div className="flex items-center justify-center h-48 bg-white overflow-hidden">
