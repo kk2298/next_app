@@ -61,7 +61,7 @@ const Navbar = (props: Props) => {
       Cookies.remove('role');
       setIsAuthenticated(false);
       setUserRole('');
-      router.push('/products');
+      router.push('/');
     } catch (error: any) {
       console.log(error.message);
       toast.error(error.message);

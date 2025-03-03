@@ -47,7 +47,7 @@ const SignUpPage = () => {
     try {
       const response = await axios.post("/api/signup", { username, email, password });
       console.log("Signup success", response.data);
-      router.push("/products");
+      router.push("/");
     } catch (error: any) {
       console.log("Signup failed", error.message);
       if (error.response?.data?.error === 'User already exists') {

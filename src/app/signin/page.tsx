@@ -23,7 +23,7 @@ const SignInPage = () => {
       const response = await axios.post("/api/login", { email, password });
       console.log("Login success", response.data);
       toast.success("Login success");
-      router.push("/products");
+      router.push("/");
     } catch (error: any) {
       if (error.response?.data?.error === 'User does not exist') {
         setError('User does not exist');
