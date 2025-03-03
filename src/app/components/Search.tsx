@@ -4,9 +4,9 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import productImages from '../constants';
-import Breadcrumbs from  '../components/breadcrumbs';
+import Breadcrumbs from  './breadcrumbs';
 import { useDebounce } from 'use-debounce';
-import Card from "../components/card";
+import Card from "./card";
 
 export default function Search({ products }: any) {
   const [allProducts, setAllProducts] = useState(products);

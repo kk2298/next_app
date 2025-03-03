@@ -5,6 +5,10 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    product_id: {
+        type: String,
+        required: true,
+    },
     video_title: {
         type: String,
         required: true,
@@ -39,5 +43,5 @@ const productSchema = new mongoose.Schema({
     },
     },{timestamps: true});
 
-const Product = mongoose.models.product || mongoose.model('product', productSchema);
+const Product = mongoose.models.product ||  mongoose.model('product', productSchema);
 export default Product;

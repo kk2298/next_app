@@ -11,16 +11,14 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get('token')?.value || '';
   console.log(`Token: ${token}`);
 
-  if (path === '/') {
-    return NextResponse.redirect(new URL('/products', request.nextUrl));
-  }
+
 
   if (isPublicPath && token) {
     console.log('Redirecting to home because user is authenticated and trying to access a public path');
-    return NextResponse.redirect(new URL('/products', request.nextUrl));
+    return NextResponse.redirect(new URL('/', request.nextUrl));
   }
 
-  if (!isPublicPath && !token && path !== '/products') {
+  if (!isPublicPath && !token && path !== '/') {
     console.log('Redirecting to login because user is not authenticated and trying to access a protected path');
     return NextResponse.redirect(new URL('/signin', request.nextUrl));
   }
@@ -31,7 +29,6 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     '/',
-    '/products',
     '/signin',
     '/signup',
     '/resetpassword',

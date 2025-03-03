@@ -6,7 +6,7 @@ type Props = {}
 const DialogBox = ({open,setOpen, product, onSubmit, keywords, setKeywords, loading}: any) => {
       const [imagePreview, setImagePreview] = useState<string | null>(null);
       const [videoPreview, setVideoPreview] = useState<string | null>(null);
-
+      console.log('product', product)
        const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
           const file = e.target.files?.[0]
           if (!file) return
@@ -62,8 +62,10 @@ const DialogBox = ({open,setOpen, product, onSubmit, keywords, setKeywords, load
         if(product){
           console.log(product.image)
           setImagePreview(product.image);
+        }else{
+          setImagePreview(null);
         }
-    },[product])
+    },[product , open, setOpen])
       
   return (
    <>
@@ -107,6 +109,25 @@ const DialogBox = ({open,setOpen, product, onSubmit, keywords, setKeywords, load
                   required
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900"
                   placeholder="Enter product name"
+                />
+              </div>
+
+              {/* Product ID */}
+              <div>
+                <label
+                  htmlFor="product-id"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Product ID
+                </label>
+                <input
+                  type="text"
+                  id="product-id"
+                  name="product_id"
+                  defaultValue={product?.product_id || ""}
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900"
+                  placeholder="Enter product ID"
                 />
               </div>
 

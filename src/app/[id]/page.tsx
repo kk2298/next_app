@@ -4,7 +4,7 @@ import { Metadata } from "next"
 import Video from "./Video";
 import Link from "next/link";
 import Head from "next/head";
-import Breadcrumbs from '../../components/breadcrumbs'
+import Breadcrumbs from '../components/breadcrumbs'
 
 // export const metadata: Metadata = {
 //   title: "Product 1", 
@@ -13,13 +13,13 @@ import Breadcrumbs from '../../components/breadcrumbs'
 
 const port = 3000;
 export async function generateMetadata({params}: any){
-  const { id } =   await params;
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/dummy`, {
+  const {id } =   await params;
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/get-by-product-id/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({id}),
+    body: JSON.stringify({product_id: id}),
   });
   const product = await response.json();
   return {
@@ -32,16 +32,15 @@ export async function generateMetadata({params}: any){
 const Page = async ({params}: any) => {
     const {id} = await params;
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/dummy`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/get-by-product-id`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({id}),
+      body: JSON.stringify({product_id: id}),
     });
     const result = await response.json();
 
-    
   return (
     <>
       <Head>
@@ -51,8 +50,8 @@ const Page = async ({params}: any) => {
       </Head>
      <div className="bg-neutral-50 pb-5">
      <Breadcrumbs items={[
-          { label: 'Products', href: '/products' },
-          { label: result.name, href: `/products/${id}` },
+          { label: 'Products', href: '/' },
+          { label: result.name, href: `/${result?.product_id}` },
         ]} />
      </div>
     <Video  product={result}/>
