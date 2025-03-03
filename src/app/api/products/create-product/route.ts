@@ -6,7 +6,8 @@ export async function POST(req: Request){
     try {
         const formData = await req.formData();
         const data = Object.fromEntries(formData.entries());
-        let { name, video_title, description, image, video_url, tags,keywords, updated_by, created_by }: any = data;
+        let { name, video_title,product_id, description, image, video_url, tags,keywords, updated_by, created_by }: any = data;
+        console.log('product_id', product_id);
         keywords = JSON.parse(keywords);
         const file = image;
         let base64String = '';
@@ -19,14 +20,15 @@ export async function POST(req: Request){
                     .reduce((data, byte) => data + String.fromCharCode(byte), '')
             );
             image = `data:${mimeType};base64,${base64String}`;
+           
         }
-        console.log('image',image)
         const newProduct = await Product.create({
             name,
             video_title,
             description,
             image,
             video_url,
+            product_id,
             tags,
             keywords,
             updated_by,

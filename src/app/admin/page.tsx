@@ -71,7 +71,8 @@ const page = (props: Props) => {
   }
 
   async function deleteProduct(e: any){
-    e.preventDefault();
+    setLoading(true)
+
     try {   
       const response = await fetch(`/api/products/delete-product`, {
         method: 'DELETE',
@@ -87,10 +88,11 @@ const page = (props: Props) => {
         toast.error('Failed to delete product');
       }
       setShowAlert(false);
-
+      fetchAllProducts();
     } catch (error) {
       toast.error('Failed to delete product');
     }
+    setLoading(false)
   }
 
   async function fetchAllProducts(){
@@ -104,9 +106,9 @@ const page = (props: Props) => {
 
   return (
     <>
-    <DialogBox open={openAddForm} setOpen={setOpenAddForm} onSubmit={addNewProduct} keywords={keywords} setKeywords={setKeywords} loading={loading}/>
+    <DialogBox open={openAddForm} setOpen={setOpenAddForm} onSubmit={addNewProduct} product={null} keywords={keywords} setKeywords={setKeywords} loading={loading}/>
     <DialogBox open={openEditForm} setOpen={setOpenEditForm} onSubmit={updateProduct}  product={currentProduct} keywords={keywords} setKeywords={setKeywords} loading={loading}/>
-    <AlertBox open={showAlert} setOpen={setShowAlert} title='Delete Product?' description="This operation will delete the product" buttonTitle={"Delete"} onSubmit={deleteProduct}/>
+    <AlertBox open={showAlert} setOpen={setShowAlert} loading={loading} title='Delete Product?' description={`This operation will delete "${currentProduct?.name}"`} buttonTitle={"Delete"} deleteProduct={deleteProduct}/>
     <div  className="bg-neutral-50 pt-20">
   {/* All products list */}
       <div className="p-6">
@@ -161,7 +163,12 @@ const page = (props: Props) => {
                     </svg>
                   </button>
                   <button className="p-1 text-red-600 hover:text-red-800 transition" aria-label="Delete product"
-                  onClick={() => setShowAlert(true)}
+                  onClick={() => 
+                   {
+                    setShowAlert(true)
+                    setCurrentProduct(product)
+                    }
+                  }
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path strokeLinecap="round"  strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>

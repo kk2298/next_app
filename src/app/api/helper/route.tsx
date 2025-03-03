@@ -2,12 +2,11 @@ import { getDataFromToken } from "../../components/getDataToken";
 
 import { NextRequest, NextResponse } from "next/server";
 import User from "../../(backend)/models/userModel";
-import dbconnect from "../../(backend)/db";
+import dbConnect from "@/app/(backend)/db";
 
-dbconnect();
 
 export async function GET(request:NextRequest){
-
+    await dbConnect();
     try {
         const userId = await getDataFromToken(request);
         const user = await User.findOne({_id: userId})
