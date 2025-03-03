@@ -1,9 +1,9 @@
-import { connect } from "../../(backend)/dbconfig/dbconfig";
+import dbconnect  from "../../(backend)/db";
 import User from "../../(backend)/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 
-connect();
+dbconnect();
 
 export async function POST(request: NextRequest){
     try {

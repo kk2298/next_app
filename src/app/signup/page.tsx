@@ -7,77 +7,69 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 
 const SignUpPage = () => {
-  const [username,setname] =useState('')
+  const [username, setname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // Loading state
   const router = useRouter();
 
-  const validateEmail = (email: string) => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(String(email).toLowerCase());
-  };
-
-  const validatePassword = (password: string) => {
-    // Example: Password must be at least 6 characters long
-    return password.length >= 6;
-  };
+  const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validatePassword = (password: string) => password.length >= 6;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setLoading(true); // Start loading
 
     if (!validateEmail(email)) {
       setError('Invalid email format');
       toast.error('Invalid email format');
+      setLoading(false);
       return;
     }
 
     if (!validatePassword(password)) {
       setError('Password must be at least 6 characters long');
       toast.error('Password must be at least 6 characters long');
+      setLoading(false);
       return;
     }
 
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       toast.error('Passwords do not match');
+      setLoading(false);
       return;
     }
 
-    // Replace with your sign-up logic
-    // For example, call an API to create a new user
-    // If successful, redirect to the dashboard or login page
-    try
-    {
-      const response = await axios.post("/api/signup", {username,email,password});
-            console.log("Signup success", response.data);
-            router.push("/signin");
-    }
-    catch (error:any) {
+    try {
+      const response = await axios.post("/api/signup", { username, email, password });
+      console.log("Signup success", response.data);
+      router.push("/products");
+    } catch (error: any) {
       console.log("Signup failed", error.message);
-      
-      if (error.response.data.error === 'User already exists') {
+      if (error.response?.data?.error === 'User already exists') {
         setError('User already exists');
         toast.error('User already exists');
       } else {
         toast.error(error.message);
       }
-  }
-   
+    } finally {
+      setLoading(false); // Stop loading after API call
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 pt-8 px-4">
       <div className="w-full max-w-sm bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-2xl font-semibold text-center mb-6">Sign Up</h2>
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         <form onSubmit={handleSubmit}>
-        <div className="mb-4">
+          <div className="mb-4">
             <label htmlFor="username" className="block text-gray-700">Name</label>
             <input
-              type="username"
+              type="text"
               id="username"
               value={username}
               onChange={(e) => setname(e.target.value)}
@@ -120,9 +112,12 @@ const SignUpPage = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-gray-300 text-black py-2 rounded-lg hover:bg-primary-dark transition duration-200"
+            disabled={loading}
+            className={`w-full px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
+              loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-500'
+            }`}
           >
-            Sign Up
+            {loading ? 'Signing Up...' : 'Sign Up'}
           </button>
         </form>
         <p className="text-center mt-4">

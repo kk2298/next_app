@@ -1,9 +1,9 @@
-import { connect } from "../../(backend)/dbconfig/dbconfig";
+import dbconnect from "../../(backend)/db";
 import { sendMail } from "../../components/mailer";
 import User from "../../(backend)/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 
-connect();
+dbconnect();
 
 export async function POST(request : NextRequest){
     try {

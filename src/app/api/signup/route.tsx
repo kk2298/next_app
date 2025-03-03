@@ -1,11 +1,11 @@
-import {connect} from "../../(backend)/dbconfig/dbconfig";
+import dbconnect from "../../(backend)/db";
 import User from "../../(backend)/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
-//import { sendEmail } from "@/helpers/mailer";
+import jwt from "jsonwebtoken";
 
 
-connect()
+dbconnect()
 
 
 export async function POST(request: NextRequest){
@@ -35,15 +35,24 @@ export async function POST(request: NextRequest){
         const savedUser = await newUser.save()
         console.log(savedUser);
 
-        //send verification email
-
-        //await sendEmail({email, emailType: "VERIFY", userId: savedUser._id})
-
-        return NextResponse.json({
-            message: "User created successfully",
-            success: true,
-            savedUser
-        })
+        //create token data
+                const tokenData = {
+                    id: savedUser._id,
+                    username: savedUser.username,
+                    email: savedUser.email
+                }
+                //create token
+                const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET!, {expiresIn: "1d"})
+        
+                const response = NextResponse.json({
+                    message: "Login successful",
+                    success: true,
+                })
+                response.cookies.set("token", token, {
+                    httpOnly: false, 
+                    
+                })
+                return response;
         
         
 

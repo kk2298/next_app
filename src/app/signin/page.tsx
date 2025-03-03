@@ -11,42 +11,39 @@ const SignInPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // Loading state
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setLoading(true); // Start loading
 
     try {
-      
-      const response = await axios.post("/api/login", {email, password});
+      const response = await axios.post("/api/login", { email, password });
       console.log("Login success", response.data);
       toast.success("Login success");
       router.push("/products");
-  } catch (error:any) {
-    if (error.response.data.error === 'User does not exist') {
-      setError('User does not exist');
-      toast.error('User does not exist');
-    } 
-    else if (error.response.data.error === 'Invalid password') {
-      setError('Invalid password');
-      toast.error('Invalid password');
+    } catch (error: any) {
+      if (error.response?.data?.error === 'User does not exist') {
+        setError('User does not exist');
+        toast.error('User does not exist');
+      } else if (error.response?.data?.error === 'Invalid password') {
+        setError('Invalid password');
+        toast.error('Invalid password');
+      } else {
+        console.log("Login failed", error.message);
+        toast.error(error.message);
+      }
+    } finally {
+      setLoading(false); // Stop loading after API call
     }
-    
-    else {
-      console.log("Login failed", error.message);
-      toast.error(error.message);
-    }
-     
- 
-  }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-neutral-50 px-4">
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
         <h2 className="text-2xl font-semibold text-center mb-6">Sign In</h2>
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="email" className="block text-gray-700">Email</label>
@@ -72,9 +69,12 @@ const SignInPage = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-gray-300 text-black py-2 rounded-lg hover:bg-primary-dark transition duration-200"
+            disabled={loading}
+            className={`w-full px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
+              loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-500'
+            }`}
           >
-            Sign In
+            {loading ? 'Signing In...' : 'Sign In'}
           </button>
         </form>
         <p className="text-center mt-4">
