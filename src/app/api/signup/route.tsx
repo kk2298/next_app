@@ -1,4 +1,4 @@
-import dbconnect from "../../(backend)/db";
+import dbConnect from "@/app/(backend)/db";
 import User from "../../(backend)/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
