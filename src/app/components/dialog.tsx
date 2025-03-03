@@ -1,11 +1,11 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
+import { LoaderCircle } from 'lucide-react';
 type Props = {}
 
-const DialogBox = ({open,setOpen, product}: any) => {
+const DialogBox = ({open,setOpen, product, onSubmit, keywords, setKeywords, loading}: any) => {
       const [imagePreview, setImagePreview] = useState<string | null>(null);
       const [videoPreview, setVideoPreview] = useState<string | null>(null);
-      const [keywords, setKeywords] = useState<Array<String>>([]);
 
        const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
           const file = e.target.files?.[0]
@@ -41,16 +41,29 @@ const DialogBox = ({open,setOpen, product}: any) => {
           if (e.key === 'Enter') {
             e.preventDefault();
             const value = (e.target as HTMLInputElement).value.trim();
-            if (value && !keywords.includes(value)) {
-              setKeywords([...keywords, value]);
+            if (value) {
+              const newTags = value.split(',').map((v) => v.trim()).filter((v) => v);
+              const uniqueNewTags = newTags.filter((tag) => !keywords.includes(tag));
+              if (uniqueNewTags.length > 0) {
+                setKeywords([...keywords, ...uniqueNewTags]);
+              }
             }
             (e.target as HTMLInputElement).value = '';
           }
         };
         
         const handleRemoveKeyword = (tagToRemove: string) => {
-          setKeywords(keywords.filter(tag => tag !== tagToRemove));
+          setKeywords(keywords.filter((tag : any) => tag !== tagToRemove));
         };
+        // const base64String = product.image;
+        // const mimeType = base64String.match(/^data:(.*?);base64,/)?.[1] || 'image/png';
+        // const imgSrc = `data:${mimeType};base64,${base64String.split(',')[1]}`;
+    useEffect(() => { 
+        if(product){
+          console.log(product.image)
+          setImagePreview(product.image);
+        }
+    },[product])
       
   return (
    <>
@@ -66,7 +79,7 @@ const DialogBox = ({open,setOpen, product}: any) => {
             transition
             className="relative transform overflow-hidden rounded-lg bg-transparent text-left shadow-xl transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:my-8 w-full data-closed:sm:translate-y-0 data-closed:sm:scale-95"
           >
-           
+          
            <div id="root">
         <section id="add-product" className="py-8 px-4 md:px-8 mt-14">
           <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-sm p-6">
@@ -77,7 +90,7 @@ const DialogBox = ({open,setOpen, product}: any) => {
               </p>
             </div>
 
-            <form id="product-form" className="space-y-6">
+            <form id="product-form" onSubmit={onSubmit} className="space-y-6">
               {/* Product Name */}
               <div>
                 <label
@@ -338,10 +351,27 @@ const DialogBox = ({open,setOpen, product}: any) => {
                 </div>
               </div>
 
+              <div>
+                <label
+                  htmlFor="video-title"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Video Title
+                </label>
+                <input
+                  type="text"
+                  id="video-title"
+                  name="video_title"
+                  defaultValue={product?.video_title}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900"
+                  placeholder="Enter video title"
+                />
+              </div>
+
               {/* Keywords  */}
               <div>
                 <label
-                  htmlFor="product-tags"
+                  htmlFor="product-keywords"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
                   Keywords
@@ -349,7 +379,7 @@ const DialogBox = ({open,setOpen, product}: any) => {
                 <div className="relative">
                   <input
                     type="text"
-                    id="product-tags-input"
+                    id="product-keywords-input"
                     name="keywords"
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900"
                     placeholder="Add tags (press Enter after each tag)"
@@ -359,7 +389,7 @@ const DialogBox = ({open,setOpen, product}: any) => {
 
                 <div className="mt-2" id="tags-container">
                   <div className="flex flex-wrap gap-2">
-                    {keywords.map((tag: any) => (
+                    {keywords?.map((tag: any) => (
                       <div
                         key={tag}
                         className="tag inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
@@ -385,7 +415,6 @@ const DialogBox = ({open,setOpen, product}: any) => {
                       </div>
                     ))}
                   </div>
-                  <input type="hidden" id="product-tags" name="product-tags" />
                 </div>
               </div>
 
@@ -402,9 +431,10 @@ const DialogBox = ({open,setOpen, product}: any) => {
                 <button
                   type="submit"
                   id="submit-btn"
+                  disabled={loading}
                   className="px-4 py-2 bg-blue-600 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
-                  {product ? "Update Product" : "Add Product"}
+                  {loading ? <LoaderCircle className='animate-spin'/> : (product ? "Update Product" : "Add Product")}
                 </button>
               </div>
             </form>
